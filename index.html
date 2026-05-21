@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuestros Planes ♡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ====================================================
+       VARIABLES Y RESET
+    ==================================================== */
+    :root {
+      --cream:        #fdf6ee;
+      --cream-dark:   #f5e9d9;
+      --rose:         #e8a0a0;
+      --rose-light:   #f5d0d0;
+      --rose-dark:    #c97878;
+      --sage:         #9ab89a;
+      --sage-light:   #c8dfc8;
+      --sage-dark:    #6a986a;
+      --brown:        #6b4c3b;
+      --brown-light:  #a07060;
+      --text-main:    #3a2a22;
+      --text-soft:    #7a5c50;
+      --text-muted:   #b09080;
+      --white:        #ffffff;
+      --red-venc:     #e05555;
+      --red-venc-bg:  #fde8e8;
+      --shadow-soft:  0 4px 20px rgba(107, 76, 59, 0.10);
+      --shadow-card:  0 2px 12px rgba(107, 76, 59, 0.08);
+      --radius-sm:    8px;
+      --radius-md:    16px;
+      --radius-lg:    24px;
+      --radius-full:  9999px;
+      --transition:   all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-main);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 10% 20%, rgba(232, 160, 160, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(154, 184, 154, 0.12) 0%, transparent 50%);
+    }
+
+    /* ====================================================
+       PANTALLA DE LOGIN
+    ==================================================== */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-card .heart-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    .login-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--brown);
+      margin-bottom: 0.4rem;
+    }
+
+    .login-card p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: var(--radius-sm);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background: var(--cream);
+      transition: var(--transition);
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--rose);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(232, 160, 160, 0.15);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.6rem;
+      border: none;
+      border-radius: var(--radius-full);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--rose);
+      color: var(--white);
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--rose-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(201, 120, 120, 0.35);
+    }
+
+    .btn-secondary {
+      background: var(--cream-dark);
+      color: var(--text-soft);
+    }
+
+    .btn-secondary:hover {
+      background: var(--sage-light);
+      color: var(--sage-dark);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--red-venc);
+      border: 1.5px solid var(--red-venc);
+      font-size: 0.82rem;
+      padding: 0.4rem 0.9rem;
+    }
+
+    .btn-danger:hover {
+      background: var(--red-venc-bg);
+    }
+
+    .btn-sm {
+      padding: 0.45rem 1rem;
+      font-size: 0.82rem;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .btn-icon:hover {
+      background: var(--cream-dark);
+      color: var(--text-main);
+    }
+
+    .error-msg {
+      background: var(--red-venc-bg);
+      color: var(--red-venc);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .error-msg.visible {
+      display: block;
+    }
+
+    /* ====================================================
+       APP PRINCIPAL
+    ==================================================== */
+    #app-screen {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    #app-screen.visible {
+      display: flex;
+      animation: fadeIn 0.4s ease;
+    }
+
+    /* HEADER */
+    .app-header {
+      background: var(--white);
+      box-shadow: var(--shadow-card);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-header .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--brown);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--cream);
+      border-radius: var(--radius-full);
+      padding: 0.4rem 1rem 0.4rem 0.4rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .user-chip:hover {
+      background: var(--cream-dark);
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--rose-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--rose-dark);
+      font-weight: 700;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-lg {
+      width: 72px;
+      height: 72px;
+      font-size: 1.6rem;
+    }
+
+    /* NAV TABS */
+    .app-nav {
+      background: var(--white);
+      border-bottom: 1.5px solid var(--cream-dark);
+      display: flex;
+      padding: 0 2rem;
+      gap: 0;
+    }
+
+    .nav-tab {
+      padding: 0.9rem 1.4rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .nav-tab:hover {
+      color: var(--text-soft);
+    }
+
+    .nav-tab.active {
+      color: var(--rose-dark);
+      border-bottom-color: var(--rose-dark);
+    }
+
+    /* CONTENIDO */
+    .app-content {
+      flex: 1;
+      padding: 2rem;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--brown);
+    }
+
+    /* ====================================================
+       PLANES — FILTROS
+    ==================================================== */
+    .filters-bar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-chip {
+      padding: 0.35rem 0.9rem;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--cream-dark);
+      background: var(--white);
+      color: var(--text-soft);
+      transition: var(--transition);
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      background: var(--rose-light);
+      border-color: var(--rose);
+      color: var(--rose-dark);
+    }
+
+    /* ====================================================
+       TARJETAS DE PLANES
+    ==================================================== */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .plan-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      padding: 1.3rem;
+      transition: var(--transition);
+      border: 1.5px solid transparent;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-soft);
+      border-color: var(--cream-dark);
+    }
+
+    .plan-card.completado {
+      opacity: 0.65;
+    }
+
+    .plan-card.completado .plan-titulo {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .plan-card.vencido {
+      border-color: var(--red-venc);
+      background: var(--red-venc-bg);
+    }
+
+    .plan-card.vencido .plan-titulo {
+      color: var(--red-venc);
+    }
+
+    .plan-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .categoria-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .categoria-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    .vencido-badge {
+      background: var(--red-venc);
+      color: var(--white);
+      padding: 0.15rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .plan-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--text-main);
+      margin-bottom: 0.6rem;
+      line-height: 1.35;
+    }
+
+    .plan-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .plan-meta-item {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .plan-meta-item span.icon {
+      font-size: 0.85rem;
+    }
+
+    .plan-creator {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .creator-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--sage-dark);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .creator-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .plan-card-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-completar {
+      background: var(--sage-light);
+      color: var(--sage-dark);
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.4rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Lato', sans-serif;
+    }
+
+    .btn-completar:hover {
+      background: var(--sage);
+      color: var(--white);
+    }
+
+    .completado-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+      color: var(--sage-dark);
+      font-weight: 700;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .empty-state p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--text-soft);
+    }
+
+    /* ====================================================
+       CATEGORÍAS
+    ==================================================== */
+    .categorias-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .categoria-row {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      padding: 1rem 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      animation: slideUp 0.3s ease;
+      transition: var(--transition);
+    }
+
+    .categoria-row:hover {
+      box-shadow: var(--shadow-soft);
+    }
+
+    .categoria-color-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .categoria-nombre {
+      flex: 1;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .categoria-actions {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    /* ====================================================
+       PERFIL
+    ==================================================== */
+    .perfil-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 2rem;
+      max-width: 420px;
+    }
+
+    .perfil-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .perfil-avatar-wrapper {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .perfil-avatar-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: var(--transition);
+      font-size: 1.2rem;
+    }
+
+    .perfil-avatar-wrapper:hover .perfil-avatar-overlay {
+      opacity: 1;
+    }
+
+    .perfil-nombre {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--brown);
+    }
+
+    /* ====================================================
+       MODAL
+    ==================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(58, 42, 34, 0.35);
+      backdrop-filter: blur(3px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(107, 76, 59, 0.2);
+      padding: 2rem;
+      width: 100%;
+      max-width: 440px;
+      transform: scale(0.95) translateY(10px);
+      transition: var(--transition);
+    }
+
+    .modal-overlay.visible .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--brown);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      justify-content: flex-end;
+    }
+
+    /* Color picker inline */
+    .color-options {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .color-option {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2.5px solid transparent;
+      transition: var(--transition);
+    }
+
+    .color-option:hover,
+    .color-option.selected {
+      border-color: var(--brown);
+      transform: scale(1.15);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* ====================================================
+       ANIMACIONES
+    ==================================================== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14%       { transform: scale(1.15); }
+      28%       { transform: scale(1); }
+      42%       { transform: scale(1.1); }
+      70%       { transform: scale(1); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ====================================================
+       RESPONSIVE
+    ==================================================== */
+    @media (max-width: 600px) {
+      .app-content { padding: 1rem; }
+      .app-header  { padding: 0.8rem 1rem; }
+      .app-nav     { padding: 0 0.5rem; }
+      .nav-tab     { padding: 0.8rem 0.8rem; font-size: 0.78rem; }
+      .plans-grid  { grid-template-columns: 1fr; }
+      .login-card  { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================
+       LOGIN
+  ================================================ -->
+  <div id="login-screen">
+    <div class="login-card">
+      <span class="heart-icon">♡</span>
+      <h1>Nuestros Planes</h1>
+      <p class="subtitle">Un lugar solo para los dos</p>
+
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" id="login-user" placeholder="Tu usuario" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" placeholder="Tu contraseña" autocomplete="current-password" />
+      </div>
+
+      <button class="btn btn-primary" id="btn-login">
+        Entrar
+      </button>
+
+      <div class="error-msg" id="login-error">Usuario o contraseña incorrectos.</div>
+    </div>
+  </div>
+
+  <!-- ================================================
+       APP PRINCIPAL
+  ================================================ -->
+  <div id="app-screen">
+    <header class="app-header">
+      <div class="logo">♡ Nuestros Planes</div>
+      <div class="header-actions">
+        <div class="user-chip" id="btn-perfil-header">
+          <div class="avatar" id="header-avatar"></div>
+          <span id="header-nombre" style="font-size:0.88rem; font-weight:700; color:var(--text-soft)"></span>
+        </div>
+        <button class="btn-icon" id="btn-logout" title="Cerrar sesión">✕</button>
+      </div>
+    </header>
+
+    <nav class="app-nav">
+      <div class="nav-tab active" data-tab="planes">Planes</div>
+      <div class="nav-tab" data-tab="categorias">Categorías</div>
+      <div class="nav-tab" data-tab="perfil">Mi Perfil</div>
+    </nav>
+
+    <main class="app-content">
+
+      <!-- TAB: PLANES -->
+      <div id="tab-planes">
+        <div class="section-header">
+          <h2>Nuestros Planes</h2>
+          <button class="btn btn-primary btn-sm" id="btn-nuevo-plan">+ Nuevo Plan</button>
+        </div>
+
+        <div class="filters-bar" id="filters-bar">
+          <div class="filter-chip active" data-filter="todos">Todos</div>
+          <div class="filter-chip" data-filter="pendientes">Pendientes</div>
+          <div class="filter-chip" data-filter="completados">Completados</div>
+          <div class="filter-chip" data-filter="vencidos">Vencidos</div>
+        </div>
+
+        <div class="plans-grid" id="plans-grid">
+          <!-- Las tarjetas se renderizan aquí -->
+        </div>
+      </div>
+
+      <!-- TAB: CATEGORÍAS -->
+      <div id="tab-categorias" style="display:none">
+        <div class="section-header">
+          <h2>Categorías</h2>
+          <button class="btn btn-primary btn-sm" id="btn-nueva-categoria">+ Nueva</button>
+        </div>
+        <div class="categorias-list" id="categorias-list"></div>
+      </div>
+
+      <!-- TAB: PERFIL -->
+      <div id="tab-perfil" style="display:none">
+        <div class="section-header">
+          <h2>Mi Perfil</h2>
+        </div>
+        <div class="perfil-card">
+          <div class="perfil-header">
+            <div class="perfil-avatar-wrapper" id="btn-cambiar-foto" title="Cambiar foto">
+              <div class="avatar avatar-lg" id="perfil-avatar"></div>
+              <div class="perfil-avatar-overlay">📷</div>
+            </div>
+            <div class="perfil-nombre" id="perfil-nombre"></div>
+          </div>
+          <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none" />
+          <p style="font-size:0.82rem; color:var(--text-muted); text-align:center">
+            Hacé clic en la foto para cambiarla.<br>Formatos: JPG, PNG, WEBP.
+          </p>
+          <div class="error-msg" id="perfil-error" style="margin-top:1rem"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ================================================
+       MODAL: NUEVO / EDITAR PLAN
+  ================================================ -->
+  <div class="modal-overlay" id="modal-plan">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-plan-title">Nuevo Plan</h3>
+        <button class="btn-icon" id="btn-close-modal-plan">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label>Título *</label>
+        <input type="text" id="plan-titulo-input" placeholder="¿Qué quieren hacer?" />
+      </div>
+      <div class="form-group">
+        <label>Categoría *</label>
+        <select id="plan-categoria-select"></select>
+      </div>
+      <div class="form-group">
+        <label>Fecha programada *</label>
+        <input type="date" id="plan-fecha-programada" />
+      </div>
+      <div class="form-group">
+        <label>Fecha de vencimiento (opcional)</label>
+        <input type="date" id="plan-fecha-vencimiento" />
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-cancel-plan">Cancelar</button>
+        <button class="btn btn-primary" id="btn-save-plan">Guardar</button>
+      </div>
+      <div class="error-msg" id="plan-error"></div>
+    </div>
+  </div>
+
+  <!-- ================================================
+       MODAL: NUEVA / EDITAR CATEGORÍA
+  ================================================ -->
+  <div class="modal-overlay" id="modal-categoria">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-categoria-title">Nueva Categoría</h3>
+        <button class="btn-icon" id="btn-close-modal-cat">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre *</label>
+        <input type="text" id="cat-nombre-input" placeholder="Ej: Salidas, Viajes, Casa..." />
+      </div>
+      <div class="form-group">
+        <label>Color *</label>
+        <div class="color-options" id="color-options"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-cancel-cat">Cancelar</button>
+        <button class="btn btn-primary" id="btn-save-cat">Guardar</button>
+      </div>
+      <div class="error-msg" id="cat-error"></div>
+    </div>
+  </div>
+
+  <!-- ================================================
+       JAVASCRIPT
+  ================================================ -->
+  <script>
+    // ====================================================
+    // CONFIG
+    // ====================================================
+    const SCRIPT_URL = 'TU_APPS_SCRIPT_URL_AQUI'; // Reemplazar con la URL del Web App
+
+    const PRESET_COLORS = [
+      '#e8a0a0', '#f5c6a0', '#f5e6a0', '#a0c8a0',
+      '#a0c8e8', '#c8a0e8', '#e8a0c8', '#9ab89a',
+      '#c97878', '#6b8fa0', '#a08060', '#607060',
+    ];
+
+    // ====================================================
+    // ESTADO DE LA APP
+    // ====================================================
+    let state = {
+      session:     null,   // { userId, sessionToken, nombreDisplay, fotoUrl }
+      planes:      [],
+      categorias:  [],
+      users:       {},     // { userId: { nombreDisplay, fotoUrl } }
+      activeTab:   'planes',
+      activeFilter: 'todos',
+      editingPlanId: null,
+      editingCatId:  null,
+      selectedColor: PRESET_COLORS[0],
+    };
+
+    // ====================================================
+    // API CALLS
+    // ====================================================
+    async function api(action, params = {}) {
+      const body = {
+        action,
+        userId:       state.session?.userId || '',
+        sessionToken: state.session?.sessionToken || '',
+        ...params,
+      };
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+      return data;
+    }
+
+    // ====================================================
+    // HASHING (SHA-256 via Web Crypto — mismo algoritmo que Apps Script)
+    // ====================================================
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray  = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // ====================================================
+    // LOGIN
+    // ====================================================
+    const loginScreen = document.getElementById('login-screen');
+    const appScreen   = document.getElementById('app-screen');
+
+    document.getElementById('btn-login').addEventListener('click', handleLogin);
+    document.getElementById('login-pass').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+
+    async function handleLogin() {
+      const userId   = document.getElementById('login-user').value.trim();
+      const password = document.getElementById('login-pass').value;
+      const errorEl  = document.getElementById('login-error');
+      const btn      = document.getElementById('btn-login');
+
+      errorEl.classList.remove('visible');
+
+      if (!userId || !password) {
+        errorEl.textContent = 'Completá usuario y contraseña.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      btn.innerHTML = '<span class="spinner"></span>';
+      btn.disabled = true;
+
+      try {
+        const hashedPassword = await sha256(password);
+        const data = await api('login', { userId, password: hashedPassword });
+
+        if (data.status === 200) {
+          state.session = {
+            userId:        data.user.userId,
+            sessionToken:  data.sessionToken,
+            nombreDisplay: data.user.nombreDisplay,
+            fotoUrl:       data.user.fotoUrl,
+          };
+
+          saveSession();
+          await initApp();
+        } else {
+          errorEl.textContent = data.error || 'Credenciales incorrectas.';
+          errorEl.classList.add('visible');
+        }
+      } catch (err) {
+        errorEl.textContent = 'Error de conexión. Intentá de nuevo.';
+        errorEl.classList.add('visible');
+      }
+
+      btn.innerHTML = 'Entrar';
+      btn.disabled = false;
+    }
+
+    // ====================================================
+    // SESIÓN — localStorage
+    // ====================================================
+    function saveSession() {
+      localStorage.setItem('cp_session', JSON.stringify(state.session));
+    }
+
+    function loadSession() {
+      const raw = localStorage.getItem('cp_session');
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch { return null; }
+    }
+
+    function clearSession() {
+      localStorage.removeItem('cp_session');
+      state.session = null;
+    }
+
+    // ====================================================
+    // INIT APP
+    // ====================================================
+    async function initApp() {
+      loginScreen.style.display = 'none';
+      appScreen.classList.add('visible');
+
+      updateHeaderUser();
+      await Promise.all([loadCategorias(), loadPlanes(), loadOtherUser()]);
+      renderPlanes();
+      renderCategorias();
+    }
+
+    async function loadOtherUser() {
+      // Carga la info del otro usuario para mostrar su avatar en los planes
+      // Se asume que hay exactamente dos usuarios: el actual y "el otro"
+      // Se guarda en state.users para uso en las tarjetas
+      state.users[state.session.userId] = {
+        nombreDisplay: state.session.nombreDisplay,
+        fotoUrl:       state.session.fotoUrl,
+      };
+    }
+
+    function updateHeaderUser() {
+      document.getElementById('header-nombre').textContent = state.session.nombreDisplay;
+      setAvatarEl(document.getElementById('header-avatar'), state.session);
+      setAvatarEl(document.getElementById('perfil-avatar'), state.session, true);
+      document.getElementById('perfil-nombre').textContent = state.session.nombreDisplay;
+    }
+
+    function setAvatarEl(el, user, large = false) {
+      if (!el) return;
+      if (user.fotoUrl) {
+        el.innerHTML = `<img src="${user.fotoUrl}" alt="${user.nombreDisplay}" />`;
+      } else {
+        el.textContent = user.nombreDisplay?.[0]?.toUpperCase() || '?';
+      }
+    }
+
+    // ====================================================
+    // LOGOUT
+    // ====================================================
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      clearSession();
+      appScreen.classList.remove('visible');
+      appScreen.style.display = 'none';
+      loginScreen.style.display = 'flex';
+      document.getElementById('login-user').value = '';
+      document.getElementById('login-pass').value = '';
+    });
+
+    // ====================================================
+    // TABS
+    // ====================================================
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        state.activeTab = tab.dataset.tab;
+
+        document.getElementById('tab-planes').style.display     = state.activeTab === 'planes'     ? '' : 'none';
+        document.getElementById('tab-categorias').style.display = state.activeTab === 'categorias' ? '' : 'none';
+        document.getElementById('tab-perfil').style.display     = state.activeTab === 'perfil'     ? '' : 'none';
+      });
+    });
+
+    // ====================================================
+    // PLANES — CARGA Y RENDER
+    // ====================================================
+    async function loadPlanes() {
+      const data = await api('getPlanes');
+      if (data.status === 200) {
+        state.planes = data.planes || [];
+      }
+    }
+
+    function isVencido(plan) {
+      if (!plan.fechaVencimiento || plan.estado === 'completado') return false;
+      const hoy  = new Date(); hoy.setHours(0,0,0,0);
+      const venc = new Date(plan.fechaVencimiento + 'T00:00:00');
+      return venc < hoy;
+    }
+
+    function filteredPlanes() {
+      return state.planes.filter(plan => {
+        if (state.activeFilter === 'pendientes')  return plan.estado === 'pendiente' && !isVencido(plan);
+        if (state.activeFilter === 'completados') return plan.estado === 'completado';
+        if (state.activeFilter === 'vencidos')    return isVencido(plan);
+        return true;
+      });
+    }
+
+    function getCategoriaById(id) {
+      return state.categorias.find(c => c.categoriaId === id) || null;
+    }
+
+    function formatDateDisplay(dateStr) {
+      if (!dateStr) return '';
+      const [y, m, d] = dateStr.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function getUserDisplay(userId) {
+      if (userId === state.session.userId) return state.session.nombreDisplay;
+      return state.users[userId]?.nombreDisplay || userId;
+    }
+
+    function getUserFoto(userId) {
+      if (userId === state.session.userId) return state.session.fotoUrl;
+      return state.users[userId]?.fotoUrl || null;
+    }
+
+    function renderPlanes() {
+      const grid    = document.getElementById('plans-grid');
+      const planes  = filteredPlanes();
+
+      if (planes.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <span class="empty-icon">🌸</span>
+            <p>No hay planes aquí todavía.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = planes.map(plan => {
+        const cat      = getCategoriaById(plan.categoriaId);
+        const vencido  = isVencido(plan);
+        const creador  = getUserDisplay(plan.creadoPor);
+        const fotoUrl  = getUserFoto(plan.creadoPor);
+        const initial  = creador?.[0]?.toUpperCase() || '?';
+
+        const catBadge = cat
+          ? `<span class="categoria-badge" style="background:${cat.colorHex}22;color:${cat.colorHex}">${cat.nombre}</span>`
+          : '';
+
+        const vencBadge = vencido
+          ? `<span class="vencido-badge">Vencido</span>`
+          : '';
+
+        const avatarContent = fotoUrl
+          ? `<img src="${fotoUrl}" alt="${creador}" />`
+          : initial;
+
+        const actions = plan.estado === 'completado'
+          ? `<span class="completado-label">✓ Completado</span>`
+          : `<button class="btn-completar" onclick="completarPlan('${plan.planId}')">Marcar completado</button>
+             <button class="btn-icon" onclick="editarPlan('${plan.planId}')" title="Editar">✏️</button>
+             <button class="btn-icon" onclick="eliminarPlan('${plan.planId}')" title="Eliminar">🗑️</button>`;
+
+        return `
+          <div class="plan-card ${plan.estado === 'completado' ? 'completado' : ''} ${vencido ? 'vencido' : ''}">
+            <div class="plan-card-header">
+              ${catBadge}
+              ${vencBadge}
+            </div>
+            <div class="plan-titulo">${escapeHtml(plan.titulo)}</div>
+            <div class="plan-meta">
+              <div class="plan-meta-item">
+                <span class="icon">📅</span> Para el ${formatDateDisplay(plan.fechaProgramada)}
+              </div>
+              ${plan.fechaVencimiento
+                ? `<div class="plan-meta-item">
+                    <span class="icon">⏳</span> Vence el ${formatDateDisplay(plan.fechaVencimiento)}
+                   </div>`
+                : ''}
+              <div class="plan-meta-item">
+                <span class="icon">📝</span> Creado el ${formatDateDisplay(plan.fechaCreacion)}
+              </div>
+            </div>
+            <div class="plan-creator">
+              <div class="creator-avatar">${avatarContent}</div>
+              <span style="font-size:0.8rem;color:var(--text-muted)">Por ${escapeHtml(creador)}</span>
+            </div>
+            <div class="plan-card-actions">${actions}</div>
+          </div>`;
+      }).join('');
+    }
+
+    // Filtros
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        state.activeFilter = chip.dataset.filter;
+        renderPlanes();
+      });
+    });
+
+    // ====================================================
+    // PLAN — CREAR / EDITAR
+    // ====================================================
+    document.getElementById('btn-nuevo-plan').addEventListener('click', () => openModalPlan(null));
+    document.getElementById('btn-close-modal-plan').addEventListener('click', closeModalPlan);
+    document.getElementById('btn-cancel-plan').addEventListener('click', closeModalPlan);
+    document.getElementById('btn-save-plan').addEventListener('click', savePlan);
+
+    function openModalPlan(planId) {
+      state.editingPlanId = planId || null;
+
+      const titulo = planId
+        ? state.planes.find(p => p.planId === planId)?.titulo || ''
+        : '';
+
+      document.getElementById('modal-plan-title').textContent = planId ? 'Editar Plan' : 'Nuevo Plan';
+      document.getElementById('plan-titulo-input').value = titulo;
+      document.getElementById('plan-error').classList.remove('visible');
+
+      // Llenar select de categorías
+      const select = document.getElementById('plan-categoria-select');
+      select.innerHTML = state.categorias.map(c =>
+        `<option value="${c.categoriaId}">${c.nombre}</option>`
+      ).join('');
+
+      if (planId) {
+        const plan = state.planes.find(p => p.planId === planId);
+        if (plan) {
+          select.value = plan.categoriaId;
+          document.getElementById('plan-fecha-programada').value = plan.fechaProgramada || '';
+          document.getElementById('plan-fecha-vencimiento').value = plan.fechaVencimiento || '';
+        }
+      } else {
+        document.getElementById('plan-fecha-programada').value = '';
+        document.getElementById('plan-fecha-vencimiento').value = '';
+      }
+
+      document.getElementById('modal-plan').classList.add('visible');
+    }
+
+    function closeModalPlan() {
+      document.getElementById('modal-plan').classList.remove('visible');
+      state.editingPlanId = null;
+    }
+
+    async function savePlan() {
+      const titulo          = document.getElementById('plan-titulo-input').value.trim();
+      const categoriaId     = document.getElementById('plan-categoria-select').value;
+      const fechaProgramada = document.getElementById('plan-fecha-programada').value;
+      const fechaVencimiento = document.getElementById('plan-fecha-vencimiento').value;
+      const errorEl         = document.getElementById('plan-error');
+      const btn             = document.getElementById('btn-save-plan');
+
+      errorEl.classList.remove('visible');
+
+      if (!titulo || !categoriaId || !fechaProgramada) {
+        errorEl.textContent = 'Título, categoría y fecha programada son obligatorios.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      btn.innerHTML = '<span class="spinner"></span>';
+      btn.disabled = true;
+
+      try {
+        let data;
+        if (state.editingPlanId) {
+          data = await api('updatePlan', {
+            planId: state.editingPlanId,
+            titulo,
+            categoriaId,
+            fechaProgramada,
+            fechaVencimiento: fechaVencimiento || null,
+          });
+        } else {
+          data = await api('createPlan', {
+            titulo,
+            categoriaId,
+            fechaProgramada,
+            fechaVencimiento: fechaVencimiento || null,
+          });
+        }
+
+        if (data.status === 200) {
+          await loadPlanes();
+          renderPlanes();
+          closeModalPlan();
+        } else {
+          errorEl.textContent = data.error || 'Error al guardar.';
+          errorEl.classList.add('visible');
+        }
+      } catch {
+        errorEl.textContent = 'Error de conexión.';
+        errorEl.classList.add('visible');
+      }
+
+      btn.innerHTML = 'Guardar';
+      btn.disabled = false;
+    }
+
+    function editarPlan(planId) {
+      openModalPlan(planId);
+    }
+
+    async function completarPlan(planId) {
+      const data = await api('completePlan', { planId });
+      if (data.status === 200) {
+        await loadPlanes();
+        renderPlanes();
+      }
+    }
+
+    async function eliminarPlan(planId) {
+      if (!confirm('¿Eliminar este plan?')) return;
+      const data = await api('deletePlan', { planId });
+      if (data.status === 200) {
+        await loadPlanes();
+        renderPlanes();
+      }
+    }
+
+    // ====================================================
+    // CATEGORÍAS — CARGA Y RENDER
+    // ====================================================
+    async function loadCategorias() {
+      const data = await api('getCategorias');
+      if (data.status === 200) {
+        state.categorias = data.categorias || [];
+      }
+    }
+
+    function renderCategorias() {
+      const list = document.getElementById('categorias-list');
+
+      if (state.categorias.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <span class="empty-icon">🏷️</span>
+            <p>Todavía no hay categorías.</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = state.categorias.map(cat => `
+        <div class="categoria-row">
+          <div class="categoria-color-dot" style="background:${cat.colorHex}"></div>
+          <div class="categoria-nombre">${escapeHtml(cat.nombre)}</div>
+          <div class="categoria-actions">
+            <button class="btn btn-secondary btn-sm" onclick="editarCategoria('${cat.categoriaId}')">Editar</button>
+            <button class="btn btn-danger" onclick="eliminarCategoria('${cat.categoriaId}')">Eliminar</button>
+          </div>
+        </div>`
+      ).join('');
+    }
+
+    // ====================================================
+    // CATEGORÍAS — CREAR / EDITAR
+    // ====================================================
+    document.getElementById('btn-nueva-categoria').addEventListener('click', () => openModalCat(null));
+    document.getElementById('btn-close-modal-cat').addEventListener('click', closeModalCat);
+    document.getElementById('btn-cancel-cat').addEventListener('click', closeModalCat);
+    document.getElementById('btn-save-cat').addEventListener('click', saveCategoria);
+
+    function renderColorOptions(selectedColor) {
+      const container = document.getElementById('color-options');
+      container.innerHTML = PRESET_COLORS.map(color => `
+        <div class="color-option ${color === selectedColor ? 'selected' : ''}"
+             style="background:${color}"
+             onclick="selectColor('${color}')">
+        </div>`
+      ).join('');
+      state.selectedColor = selectedColor || PRESET_COLORS[0];
+    }
+
+    function selectColor(color) {
+      state.selectedColor = color;
+      document.querySelectorAll('.color-option').forEach(el => {
+        el.classList.toggle('selected', el.style.background === color ||
+          el.style.backgroundColor === color);
+      });
+    }
+
+    function openModalCat(catId) {
+      state.editingCatId = catId || null;
+      document.getElementById('modal-categoria-title').textContent = catId ? 'Editar Categoría' : 'Nueva Categoría';
+      document.getElementById('cat-error').classList.remove('visible');
+
+      if (catId) {
+        const cat = state.categorias.find(c => c.categoriaId === catId);
+        document.getElementById('cat-nombre-input').value = cat?.nombre || '';
+        renderColorOptions(cat?.colorHex || PRESET_COLORS[0]);
+      } else {
+        document.getElementById('cat-nombre-input').value = '';
+        renderColorOptions(PRESET_COLORS[0]);
+      }
+
+      document.getElementById('modal-categoria').classList.add('visible');
+    }
+
+    function closeModalCat() {
+      document.getElementById('modal-categoria').classList.remove('visible');
+      state.editingCatId = null;
+    }
+
+    async function saveCategoria() {
+      const nombre   = document.getElementById('cat-nombre-input').value.trim();
+      const colorHex = state.selectedColor;
+      const errorEl  = document.getElementById('cat-error');
+      const btn      = document.getElementById('btn-save-cat');
+
+      errorEl.classList.remove('visible');
+
+      if (!nombre) {
+        errorEl.textContent = 'El nombre es obligatorio.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      btn.innerHTML = '<span class="spinner"></span>';
+      btn.disabled = true;
+
+      try {
+        let data;
+        if (state.editingCatId) {
+          data = await api('updateCategoria', {
+            categoriaId: state.editingCatId,
+            nombre,
+            colorHex,
+          });
+        } else {
+          data = await api('createCategoria', { nombre, colorHex });
+        }
+
+        if (data.status === 200) {
+          await loadCategorias();
+          renderCategorias();
+          closeModalCat();
+        } else {
+          errorEl.textContent = data.error || 'Error al guardar.';
+          errorEl.classList.add('visible');
+        }
+      } catch {
+        errorEl.textContent = 'Error de conexión.';
+        errorEl.classList.add('visible');
+      }
+
+      btn.innerHTML = 'Guardar';
+      btn.disabled = false;
+    }
+
+    function editarCategoria(catId) {
+      openModalCat(catId);
+    }
+
+    async function eliminarCategoria(catId) {
+      if (!confirm('¿Eliminar esta categoría?')) return;
+      const data = await api('deleteCategoria', { categoriaId: catId });
+      if (data.status === 200) {
+        await loadCategorias();
+        renderCategorias();
+      } else {
+        alert(data.error || 'Error al eliminar.');
+      }
+    }
+
+    // ====================================================
+    // PERFIL — FOTO
+    // ====================================================
+    document.getElementById('btn-cambiar-foto').addEventListener('click', () => {
+      document.getElementById('file-input').click();
+    });
+
+    document.getElementById('btn-perfil-header').addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector('[data-tab="perfil"]').classList.add('active');
+      state.activeTab = 'perfil';
+      document.getElementById('tab-planes').style.display     = 'none';
+      document.getElementById('tab-categorias').style.display = 'none';
+      document.getElementById('tab-perfil').style.display     = '';
+    });
+
+    document.getElementById('file-input').addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const errorEl = document.getElementById('perfil-error');
+      errorEl.classList.remove('visible');
+
+      if (file.size > 3 * 1024 * 1024) {
+        errorEl.textContent = 'La imagen no puede superar 3 MB.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        const base64 = ev.target.result.split(',')[1];
+        const data = await api('uploadPhoto', {
+          fileBase64: base64,
+          mimeType:   file.type,
+        });
+
+        if (data.status === 200) {
+          state.session.fotoUrl = data.fotoUrl;
+          saveSession();
+          updateHeaderUser();
+          renderPlanes();
+        } else {
+          errorEl.textContent = data.error || 'Error al subir la foto.';
+          errorEl.classList.add('visible');
+        }
+      };
+      reader.readAsDataURL(file);
+
+      // Limpiar input para permitir re-selección del mismo archivo
+      e.target.value = '';
+    });
+
+    // ====================================================
+    // HELPERS
+    // ====================================================
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // ====================================================
+    // ARRANQUE
+    // ====================================================
+    (async function boot() {
+      const saved = loadSession();
+      if (saved?.userId && saved?.sessionToken) {
+        state.session = saved;
+        await initApp();
+      }
+      // Si no hay sesión, el login-screen ya está visible por defecto
+    })();
+  </script>
+</body>
+</html>

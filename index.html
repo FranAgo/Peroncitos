@@ -6,35 +6,35 @@
   <title>Nuestros Planes ♡</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     /* ====================================================
        VARIABLES Y RESET
     ==================================================== */
     :root {
-      --cream:        #fdf6ee;
-      --cream-dark:   #f5e9d9;
-      --rose:         #e8a0a0;
-      --rose-light:   #f5d0d0;
-      --rose-dark:    #c97878;
-      --sage:         #9ab89a;
-      --sage-light:   #c8dfc8;
-      --sage-dark:    #6a986a;
-      --brown:        #6b4c3b;
-      --brown-light:  #a07060;
-      --text-main:    #3a2a22;
-      --text-soft:    #7a5c50;
-      --text-muted:   #b09080;
-      --white:        #ffffff;
-      --red-venc:     #e05555;
-      --red-venc-bg:  #fde8e8;
-      --shadow-soft:  0 4px 20px rgba(107, 76, 59, 0.10);
-      --shadow-card:  0 2px 12px rgba(107, 76, 59, 0.08);
-      --radius-sm:    8px;
-      --radius-md:    16px;
-      --radius-lg:    24px;
+      --bg:           #0E0C0A;
+      --bg-card:      #161310;
+      --bg-header:    #100E0B;
+      --border:       #2A2520;
+      --border-soft:  #2E2820;
+      --copper:       #B8783A;
+      --copper-light: #D4A060;
+      --copper-dim:   rgba(184,120,58,0.45);
+      --text-main:    #EDE0CC;
+      --text-soft:    #9A9088;
+      --text-muted:   #4A4540;
+      --text-faint:   #3A342C;
+      --green-ok:     #6AAA80;
+      --green-ok-bg:  #0A1E10;
+      --red-venc:     #AA6060;
+      --red-venc-bg:  #1E0A0A;
+      --white:        #FDFAF7;
+      --radius-sm:    6px;
+      --radius-md:    10px;
+      --radius-lg:    16px;
+      --radius-xl:    20px;
       --radius-full:  9999px;
-      --transition:   all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition:   all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     *, *::before, *::after {
@@ -49,13 +49,70 @@
     }
 
     body {
-      font-family: 'Lato', sans-serif;
-      background-color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
-      background-image:
-        radial-gradient(ellipse at 10% 20%, rgba(232, 160, 160, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 80%, rgba(154, 184, 154, 0.12) 0%, transparent 50%);
+      cursor: none;
+    }
+
+    /* ====================================================
+       CURSOR PERSONALIZADO
+    ==================================================== */
+    #cursor-dot {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--copper);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    #cursor-halo {
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(184,120,58,0.45);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s;
+    }
+
+    /* ====================================================
+       CHISPAS
+    ==================================================== */
+    .spark {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      transform: translate(-50%, -50%);
+      animation: spark-fly 0.7s ease-out forwards;
+    }
+
+    @keyframes spark-fly {
+      0%   { opacity: 1;  transform: translate(var(--tx0), var(--ty0)) scale(1); }
+      100% { opacity: 0;  transform: translate(var(--tx1), var(--ty1)) scale(0.2); }
+    }
+
+    /* ====================================================
+       RIPPLE EN BOTONES
+    ==================================================== */
+    .btn-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      transform: scale(0);
+      animation: ripple-out 0.5s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-out {
+      to { transform: scale(4); opacity: 0; }
     }
 
     /* ====================================================
@@ -67,53 +124,137 @@
       align-items: center;
       justify-content: center;
       padding: 2rem;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
       opacity: 0;
       animation: fadeIn 0.6s ease forwards;
     }
 
+    #login-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 40% 30%, rgba(184,120,58,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 70%, rgba(184,120,58,0.05) 0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    #stars-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
     .login-card {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      padding: 3rem 2.5rem;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border-soft);
+      border-radius: var(--radius-xl);
+      padding: 2.8rem 2.4rem 2.4rem;
       width: 100%;
       max-width: 400px;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
-    .login-card .heart-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    /* línea asimétrica superior */
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 24px;
+      width: 42%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--copper), transparent);
+    }
+
+    /* punto decorativo esquina inferior */
+    .login-card::after {
+      content: '';
+      position: absolute;
+      bottom: 20px;
+      right: 22px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(184,120,58,0.3);
+    }
+
+    .login-emblem {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      position: relative;
+    }
+
+    .heart-icon {
+      font-size: 2rem;
+      color: var(--copper);
       display: block;
-      animation: heartbeat 2s ease-in-out infinite;
+      animation: heartbeat 3.2s ease-in-out infinite;
+      line-height: 1;
+    }
+
+    .login-emblem::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,120,58,0.15) 0%, transparent 70%);
+      animation: halo 3.2s ease-in-out infinite;
     }
 
     .login-card h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      color: var(--brown);
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--text-main);
       margin-bottom: 0.4rem;
+      letter-spacing: -0.5px;
+      line-height: 1.05;
     }
 
     .login-card p.subtitle {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 0.95rem;
       color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.8rem;
     }
 
+    .login-card p.subtitle em {
+      color: var(--copper);
+      font-style: normal;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.6rem;
+    }
+
+    .login-divider-line { flex: 1; height: 0.5px; background: var(--border); }
+    .login-divider-dot  { width: 3px; height: 3px; border-radius: 50%; background: rgba(184,120,58,0.45); }
+
     .form-group {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.1rem;
       text-align: left;
     }
 
     .form-group label {
       display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.72rem;
+      font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-soft);
-      margin-bottom: 0.4rem;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
     }
 
     .form-group input,
@@ -121,22 +262,28 @@
     .form-group textarea {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1.5px solid var(--cream-dark);
+      border: 0.5px solid var(--border-soft);
       border-radius: var(--radius-sm);
-      font-family: 'Lato', sans-serif;
+      font-family: 'Jost', sans-serif;
       font-size: 0.95rem;
+      font-weight: 300;
       color: var(--text-main);
-      background: var(--cream);
+      background: var(--bg);
       transition: var(--transition);
       outline: none;
+      cursor: none;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-faint);
     }
 
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      border-color: var(--rose);
-      background: var(--white);
-      box-shadow: 0 0 0 3px rgba(232, 160, 160, 0.15);
+      border-color: var(--copper-dim);
+      background: #1A1612;
     }
 
     .form-group textarea {
@@ -144,50 +291,70 @@
       min-height: 80px;
     }
 
+    /* select oscuro */
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234A4540' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    .form-group select option {
+      background: #1A1612;
+      color: var(--text-main);
+    }
+
+    /* ====================================================
+       BOTONES
+    ==================================================== */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.8rem 1.6rem;
-      border: none;
-      border-radius: var(--radius-full);
-      font-family: 'Lato', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: none;
       transition: var(--transition);
       text-decoration: none;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-primary {
-      background: var(--rose);
-      color: var(--white);
+      border: 0.5px solid var(--copper-dim);
+      background: transparent;
+      color: var(--copper);
       width: 100%;
     }
 
     .btn-primary:hover {
-      background: var(--rose-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(201, 120, 120, 0.35);
+      background: var(--copper);
+      color: var(--bg);
     }
 
     .btn-secondary {
-      background: var(--cream-dark);
+      border: 0.5px solid var(--border);
+      background: transparent;
       color: var(--text-soft);
     }
 
     .btn-secondary:hover {
-      background: var(--sage-light);
-      color: var(--sage-dark);
+      border-color: var(--text-muted);
+      color: var(--text-main);
     }
 
     .btn-danger {
       background: transparent;
       color: var(--red-venc);
-      border: 1.5px solid var(--red-venc);
-      font-size: 0.82rem;
-      padding: 0.4rem 0.9rem;
+      border: 0.5px solid rgba(170,96,96,0.4);
+      font-size: 0.72rem;
+      padding: 0.35rem 0.8rem;
     }
 
     .btn-danger:hover {
@@ -195,14 +362,14 @@
     }
 
     .btn-sm {
-      padding: 0.45rem 1rem;
-      font-size: 0.82rem;
+      padding: 0.42rem 0.9rem;
+      font-size: 0.7rem;
     }
 
     .btn-icon {
       background: none;
       border: none;
-      cursor: pointer;
+      cursor: none;
       padding: 0.3rem;
       border-radius: var(--radius-sm);
       transition: var(--transition);
@@ -212,16 +379,17 @@
     }
 
     .btn-icon:hover {
-      background: var(--cream-dark);
+      background: var(--bg-card);
       color: var(--text-main);
     }
 
     .error-msg {
       background: var(--red-venc-bg);
       color: var(--red-venc);
+      border: 0.5px solid rgba(170,96,96,0.3);
       border-radius: var(--radius-sm);
-      padding: 0.7rem 1rem;
-      font-size: 0.85rem;
+      padding: 0.65rem 1rem;
+      font-size: 0.82rem;
       margin-top: 1rem;
       display: none;
     }
@@ -246,9 +414,9 @@
 
     /* HEADER */
     .app-header {
-      background: var(--white);
-      box-shadow: var(--shadow-card);
-      padding: 1rem 2rem;
+      background: var(--bg-header);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0.9rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -257,13 +425,32 @@
       z-index: 100;
     }
 
+    /* línea cobre bajo el logo */
+    .app-header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 2rem;
+      width: 28px;
+      height: 1px;
+      background: var(--copper);
+    }
+
     .app-header .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--brown);
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    .logo-heart {
+      color: var(--copper);
+      font-style: normal;
+      animation: heartbeat 3.2s ease-in-out infinite;
+      display: inline-block;
     }
 
     .header-actions {
@@ -276,29 +463,30 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      background: var(--cream);
+      background: transparent;
+      border: 0.5px solid var(--border);
       border-radius: var(--radius-full);
-      padding: 0.4rem 1rem 0.4rem 0.4rem;
-      cursor: pointer;
+      padding: 0.3rem 0.9rem 0.3rem 0.3rem;
+      cursor: none;
       transition: var(--transition);
     }
 
     .user-chip:hover {
-      background: var(--cream-dark);
+      border-color: var(--copper-dim);
     }
 
     .avatar {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      object-fit: cover;
-      background: var(--rose-light);
+      border: 0.5px solid var(--copper-dim);
+      background: #1E1A14;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.85rem;
-      color: var(--rose-dark);
-      font-weight: 700;
+      font-size: 0.78rem;
+      color: var(--copper);
+      font-weight: 500;
       flex-shrink: 0;
       overflow: hidden;
     }
@@ -312,28 +500,27 @@
     .avatar-lg {
       width: 72px;
       height: 72px;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
 
     /* NAV TABS */
     .app-nav {
-      background: var(--white);
-      border-bottom: 1.5px solid var(--cream-dark);
+      background: var(--bg-header);
+      border-bottom: 0.5px solid var(--border);
       display: flex;
       padding: 0 2rem;
-      gap: 0;
     }
 
     .nav-tab {
-      padding: 0.9rem 1.4rem;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-bottom: 2.5px solid transparent;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-faint);
+      cursor: none;
+      border-bottom: 1.5px solid transparent;
       transition: var(--transition);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.14em;
     }
 
     .nav-tab:hover {
@@ -341,8 +528,8 @@
     }
 
     .nav-tab.active {
-      color: var(--rose-dark);
-      border-bottom-color: var(--rose-dark);
+      color: var(--copper);
+      border-bottom-color: var(--copper);
     }
 
     /* CONTENIDO */
@@ -362,9 +549,18 @@
     }
 
     .section-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--brown);
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--text-main);
+    }
+
+    .section-header-sub {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      margin-top: 2px;
     }
 
     /* ====================================================
@@ -372,28 +568,29 @@
     ==================================================== */
     .filters-bar {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
       margin-bottom: 1.5rem;
     }
 
     .filter-chip {
-      padding: 0.35rem 0.9rem;
-      border-radius: var(--radius-full);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1.5px solid var(--cream-dark);
-      background: var(--white);
-      color: var(--text-soft);
+      padding: 0.3rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: none;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
       transition: var(--transition);
     }
 
     .filter-chip:hover,
     .filter-chip.active {
-      background: var(--rose-light);
-      border-color: var(--rose);
-      color: var(--rose-dark);
+      border-color: var(--copper-dim);
+      color: var(--copper);
     }
 
     /* ====================================================
@@ -402,28 +599,57 @@
     .plans-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.2rem;
+      gap: 1rem;
     }
 
     .plan-card {
-      background: var(--white);
+      background: var(--bg-card);
       border-radius: var(--radius-md);
-      box-shadow: var(--shadow-card);
-      padding: 1.3rem;
+      border: 0.5px solid var(--border);
+      padding: 1.2rem;
       transition: var(--transition);
-      border: 1.5px solid transparent;
       position: relative;
       animation: slideUp 0.3s ease;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* shimmer al hover */
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(184,120,58,0.07), transparent);
+      transform: skewX(-15deg);
+      transition: left 0.45s ease;
+      pointer-events: none;
+    }
+
+    /* línea superior al hover */
+    .plan-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--copper);
+      transition: width 0.3s ease;
     }
 
     .plan-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-soft);
-      border-color: var(--cream-dark);
+      border-color: rgba(184,120,58,0.3);
+      transform: translateY(-2px);
     }
 
+    .plan-card:hover::before { left: 130%; }
+    .plan-card:hover::after  { width: 55%; }
+
     .plan-card.completado {
-      opacity: 0.65;
+      opacity: 0.55;
     }
 
     .plan-card.completado .plan-titulo {
@@ -432,8 +658,8 @@
     }
 
     .plan-card.vencido {
-      border-color: var(--red-venc);
-      background: var(--red-venc-bg);
+      border-color: rgba(170,96,96,0.4);
+      background: #1A1010;
     }
 
     .plan-card.vencido .plan-titulo {
@@ -445,85 +671,90 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 0.5rem;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.7rem;
     }
 
     .categoria-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.2rem 0.7rem;
-      border-radius: var(--radius-full);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      padding: 0.18rem 0.6rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       flex-shrink: 0;
     }
 
     .categoria-badge::before {
       content: '';
-      width: 7px;
-      height: 7px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: currentColor;
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
     .vencido-badge {
-      background: var(--red-venc);
-      color: var(--white);
-      padding: 0.15rem 0.6rem;
-      border-radius: var(--radius-full);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      background: var(--red-venc-bg);
+      color: var(--red-venc);
+      border: 0.5px solid rgba(170,96,96,0.4);
+      padding: 0.15rem 0.55rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .plan-titulo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      font-style: italic;
       color: var(--text-main);
       margin-bottom: 0.6rem;
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
     .plan-meta {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
-      margin-bottom: 1rem;
+      gap: 0.2rem;
+      margin-bottom: 0.9rem;
     }
 
     .plan-meta-item {
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      font-size: 0.75rem;
+      color: var(--text-faint);
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     .plan-meta-item span.icon {
-      font-size: 0.85rem;
+      font-size: 0.78rem;
     }
 
     .plan-creator {
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
     }
 
     .creator-avatar {
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: var(--sage-light);
+      background: #1E1A14;
+      border: 0.5px solid var(--copper-dim);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--sage-dark);
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: var(--copper);
       overflow: hidden;
       flex-shrink: 0;
     }
@@ -541,30 +772,31 @@
     }
 
     .btn-completar {
-      background: var(--sage-light);
-      color: var(--sage-dark);
-      border: none;
-      border-radius: var(--radius-full);
-      padding: 0.4rem 1rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
+      background: transparent;
+      color: var(--green-ok);
+      border: 0.5px solid rgba(106,170,128,0.4);
+      border-radius: var(--radius-sm);
+      padding: 0.35rem 0.9rem;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: none;
       transition: var(--transition);
-      font-family: 'Lato', sans-serif;
+      font-family: 'Jost', sans-serif;
     }
 
     .btn-completar:hover {
-      background: var(--sage);
-      color: var(--white);
+      background: var(--green-ok-bg);
     }
 
     .completado-label {
       display: inline-flex;
       align-items: center;
       gap: 0.3rem;
-      font-size: 0.82rem;
-      color: var(--sage-dark);
-      font-weight: 700;
+      font-size: 0.72rem;
+      color: var(--green-ok);
+      letter-spacing: 0.06em;
     }
 
     /* Empty state */
@@ -575,15 +807,17 @@
     }
 
     .empty-state .empty-icon {
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
       display: block;
+      opacity: 0.35;
     }
 
     .empty-state p {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--text-soft);
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text-faint);
     }
 
     /* ====================================================
@@ -592,14 +826,14 @@
     .categorias-list {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.7rem;
     }
 
     .categoria-row {
-      background: var(--white);
+      background: var(--bg-card);
       border-radius: var(--radius-md);
-      box-shadow: var(--shadow-card);
-      padding: 1rem 1.3rem;
+      border: 0.5px solid var(--border);
+      padding: 0.9rem 1.2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -609,19 +843,20 @@
     }
 
     .categoria-row:hover {
-      box-shadow: var(--shadow-soft);
+      border-color: rgba(184,120,58,0.3);
     }
 
     .categoria-color-dot {
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
     .categoria-nombre {
       flex: 1;
-      font-weight: 700;
+      font-weight: 400;
+      font-size: 0.9rem;
       color: var(--text-main);
     }
 
@@ -634,9 +869,9 @@
        PERFIL
     ==================================================== */
     .perfil-card {
-      background: var(--white);
+      background: var(--bg-card);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-card);
+      border: 0.5px solid var(--border);
       padding: 2rem;
       max-width: 420px;
     }
@@ -651,14 +886,14 @@
 
     .perfil-avatar-wrapper {
       position: relative;
-      cursor: pointer;
+      cursor: none;
     }
 
     .perfil-avatar-overlay {
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.45);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -672,9 +907,10 @@
     }
 
     .perfil-nombre {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--brown);
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--text-main);
     }
 
     /* ====================================================
@@ -683,8 +919,8 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(58, 42, 34, 0.35);
-      backdrop-filter: blur(3px);
+      background: rgba(8,7,6,0.75);
+      backdrop-filter: blur(4px);
       z-index: 200;
       display: flex;
       align-items: center;
@@ -701,14 +937,26 @@
     }
 
     .modal {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 20px 60px rgba(107, 76, 59, 0.2);
+      background: var(--bg-card);
+      border: 0.5px solid var(--border-soft);
+      border-radius: var(--radius-xl);
       padding: 2rem;
       width: 100%;
       max-width: 440px;
-      transform: scale(0.95) translateY(10px);
+      transform: scale(0.96) translateY(10px);
       transition: var(--transition);
+      position: relative;
+    }
+
+    /* línea asimétrica en modal */
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20px;
+      width: 35%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--copper), transparent);
     }
 
     .modal-overlay.visible .modal {
@@ -723,9 +971,10 @@
     }
 
     .modal-header h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--brown);
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text-main);
     }
 
     .modal-actions {
@@ -744,27 +993,27 @@
     }
 
     .color-option {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      cursor: pointer;
-      border: 2.5px solid transparent;
+      cursor: none;
+      border: 2px solid transparent;
       transition: var(--transition);
     }
 
     .color-option:hover,
     .color-option.selected {
-      border-color: var(--brown);
+      border-color: var(--text-main);
       transform: scale(1.15);
     }
 
     /* Loading spinner */
     .spinner {
       display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: white;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid rgba(184,120,58,0.3);
+      border-top-color: var(--copper);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
@@ -783,11 +1032,18 @@
     }
 
     @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      14%       { transform: scale(1.15); }
-      28%       { transform: scale(1); }
-      42%       { transform: scale(1.1); }
-      70%       { transform: scale(1); }
+      0%   { transform: scale(1);    opacity: 0.85; }
+      18%  { transform: scale(1.14); opacity: 1;    }
+      32%  { transform: scale(1);    opacity: 0.85; }
+      46%  { transform: scale(1.08); opacity: 0.95; }
+      60%  { transform: scale(1);    opacity: 0.85; }
+      100% { transform: scale(1);    opacity: 0.85; }
+    }
+
+    @keyframes halo {
+      0%, 100% { transform: scale(1);   opacity: 0.6; }
+      18%       { transform: scale(1.4); opacity: 1;   }
+      60%       { transform: scale(1);   opacity: 0.6; }
     }
 
     @keyframes spin {
@@ -799,9 +1055,9 @@
     ==================================================== */
     @media (max-width: 600px) {
       .app-content { padding: 1rem; }
-      .app-header  { padding: 0.8rem 1rem; }
+      .app-header  { padding: 0.75rem 1rem; }
       .app-nav     { padding: 0 0.5rem; }
-      .nav-tab     { padding: 0.8rem 0.8rem; font-size: 0.78rem; }
+      .nav-tab     { padding: 0.75rem 0.7rem; font-size: 0.65rem; }
       .plans-grid  { grid-template-columns: 1fr; }
       .login-card  { padding: 2rem 1.5rem; }
     }
@@ -809,14 +1065,27 @@
 </head>
 <body>
 
+  <!-- cursores -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-halo"></div>
+
   <!-- ================================================
        LOGIN
   ================================================ -->
   <div id="login-screen">
+    <canvas id="stars-canvas"></canvas>
     <div class="login-card">
-      <span class="heart-icon">♡</span>
+      <div class="login-emblem">
+        <span class="heart-icon">♡</span>
+      </div>
       <h1>Nuestros Planes</h1>
-      <p class="subtitle">Un lugar solo para los dos</p>
+      <p class="subtitle">el espacio de <em>los dos</em></p>
+
+      <div class="login-divider">
+        <div class="login-divider-line"></div>
+        <div class="login-divider-dot"></div>
+        <div class="login-divider-line"></div>
+      </div>
 
       <div class="form-group">
         <label>Usuario</label>
@@ -840,11 +1109,11 @@
   ================================================ -->
   <div id="app-screen">
     <header class="app-header">
-      <div class="logo">♡ Nuestros Planes</div>
+      <div class="logo"><span class="logo-heart">♡</span> Nuestros Planes</div>
       <div class="header-actions">
         <div class="user-chip" id="btn-perfil-header">
           <div class="avatar" id="header-avatar"></div>
-          <span id="header-nombre" style="font-size:0.88rem; font-weight:700; color:var(--text-soft)"></span>
+          <span id="header-nombre" style="font-size:0.82rem; font-weight:400; color:var(--text-soft)"></span>
         </div>
         <button class="btn-icon" id="btn-logout" title="Cerrar sesión">✕</button>
       </div>
@@ -861,7 +1130,10 @@
       <!-- TAB: PLANES -->
       <div id="tab-planes">
         <div class="section-header">
-          <h2>Nuestros Planes</h2>
+          <div>
+            <h2>Nuestros Planes</h2>
+            <p class="section-header-sub">lo que queremos vivir juntos</p>
+          </div>
           <button class="btn btn-primary btn-sm" id="btn-nuevo-plan">+ Nuevo Plan</button>
         </div>
 
@@ -872,9 +1144,7 @@
           <div class="filter-chip" data-filter="vencidos">Vencidos</div>
         </div>
 
-        <div class="plans-grid" id="plans-grid">
-          <!-- Las tarjetas se renderizan aquí -->
-        </div>
+        <div class="plans-grid" id="plans-grid"></div>
       </div>
 
       <!-- TAB: CATEGORÍAS -->
@@ -900,7 +1170,7 @@
             <div class="perfil-nombre" id="perfil-nombre"></div>
           </div>
           <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none" />
-          <p style="font-size:0.82rem; color:var(--text-muted); text-align:center">
+          <p style="font-size:0.78rem; color:var(--text-faint); text-align:center">
             Hacé clic en la foto para cambiarla.<br>Formatos: JPG, PNG, WEBP.
           </p>
           <div class="error-msg" id="perfil-error" style="margin-top:1rem"></div>
@@ -925,7 +1195,7 @@
         <input type="text" id="plan-titulo-input" placeholder="¿Qué quieren hacer?" />
       </div>
       <div class="form-group">
-        <label>Categoría *</label>
+        <label>Categoría (opcional)</label>
         <select id="plan-categoria-select"></select>
       </div>
       <div class="form-group">
@@ -991,16 +1261,114 @@
     // ESTADO DE LA APP
     // ====================================================
     let state = {
-      session:     null,   // { userId, sessionToken, nombreDisplay, fotoUrl }
-      planes:      [],
-      categorias:  [],
-      users:       {},     // { userId: { nombreDisplay, fotoUrl } }
-      activeTab:   'planes',
-      activeFilter: 'todos',
+      session:       null,
+      planes:        [],
+      categorias:    [],
+      users:         {},
+      activeTab:     'planes',
+      activeFilter:  'todos',
       editingPlanId: null,
       editingCatId:  null,
       selectedColor: PRESET_COLORS[0],
     };
+
+    // ====================================================
+    // CURSOR + CHISPAS
+    // ====================================================
+    const cursorDot  = document.getElementById('cursor-dot');
+    const cursorHalo = document.getElementById('cursor-halo');
+    let haloX = 0, haloY = 0, dotX = 0, dotY = 0;
+
+    document.addEventListener('mousemove', e => {
+      dotX = e.clientX;
+      dotY = e.clientY;
+      cursorDot.style.left = dotX + 'px';
+      cursorDot.style.top  = dotY + 'px';
+    });
+
+    (function animateHalo() {
+      haloX += (dotX - haloX) * 0.12;
+      haloY += (dotY - haloY) * 0.12;
+      cursorHalo.style.left = haloX + 'px';
+      cursorHalo.style.top  = haloY + 'px';
+      requestAnimationFrame(animateHalo);
+    })();
+
+    const SPARK_COLORS = ['#B8783A', '#D4A060', '#EDE0CC', '#C9603A', '#F0C88A'];
+
+    function spawnSparks(cx, cy, count) {
+      for (let i = 0; i < count; i++) {
+        const s     = document.createElement('div');
+        s.className = 'spark';
+        const angle = Math.random() * Math.PI * 2;
+        const dist  = 22 + Math.random() * 36;
+        const tx1   = Math.cos(angle) * dist;
+        const ty1   = Math.sin(angle) * dist;
+        s.style.cssText = [
+          'left:' + cx + 'px',
+          'top:'  + cy + 'px',
+          'width:'  + (2 + Math.random() * 3) + 'px',
+          'height:' + (2 + Math.random() * 3) + 'px',
+          'background:' + SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)],
+          '--tx0:0px', '--ty0:0px',
+          '--tx1:' + tx1 + 'px',
+          '--ty1:' + ty1 + 'px',
+          'animation-duration:' + (0.5 + Math.random() * 0.3) + 's',
+        ].join(';');
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 900);
+      }
+    }
+
+    document.addEventListener('click', e => spawnSparks(e.clientX, e.clientY, 10));
+
+    function addRipple(btn, e) {
+      const r    = document.createElement('span');
+      r.className = 'btn-ripple';
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.style.cssText = [
+        'width:'  + size + 'px',
+        'height:' + size + 'px',
+        'left:'   + (e.clientX - rect.left - size / 2) + 'px',
+        'top:'    + (e.clientY - rect.top  - size / 2) + 'px',
+      ].join(';');
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 600);
+    }
+
+    // ====================================================
+    // ESTRELLAS (login)
+    // ====================================================
+    function initStars() {
+      const canvas  = document.getElementById('stars-canvas');
+      if (!canvas) return;
+      const parent  = canvas.parentElement;
+      canvas.width  = parent.offsetWidth  || 600;
+      canvas.height = parent.offsetHeight || 600;
+      const ctx     = canvas.getContext('2d');
+      const stars   = Array.from({ length: 60 }, () => ({
+        x:     Math.random() * canvas.width,
+        y:     Math.random() * canvas.height,
+        r:     Math.random() * 1.2 + 0.3,
+        speed: 0.003 + Math.random() * 0.004,
+        phase: Math.random() * Math.PI * 2,
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const t = Date.now() * 0.001;
+        stars.forEach(s => {
+          const alpha = 0.10 + 0.30 * Math.abs(Math.sin(t * s.speed * 6 + s.phase));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(237,224,204,' + alpha + ')';
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
 
     // ====================================================
     // API CALLS
@@ -1012,24 +1380,8 @@
         sessionToken: state.session?.sessionToken || '',
         ...params,
       };
-
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(body),
-      });
-
-      const data = await res.json();
-      return data;
-    }
-
-    // ====================================================
-    // HASHING (SHA-256 via Web Crypto — mismo algoritmo que Apps Script)
-    // ====================================================
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray  = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      const res  = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(body) });
+      return res.json();
     }
 
     // ====================================================
@@ -1038,7 +1390,11 @@
     const loginScreen = document.getElementById('login-screen');
     const appScreen   = document.getElementById('app-screen');
 
-    document.getElementById('btn-login').addEventListener('click', handleLogin);
+    document.getElementById('btn-login').addEventListener('click', e => {
+      addRipple(e.currentTarget, e);
+      handleLogin();
+    });
+
     document.getElementById('login-pass').addEventListener('keydown', e => {
       if (e.key === 'Enter') handleLogin();
     });
@@ -1058,7 +1414,7 @@
       }
 
       btn.innerHTML = '<span class="spinner"></span>';
-      btn.disabled = true;
+      btn.disabled  = true;
 
       try {
         const data = await api('login', { userId, password });
@@ -1070,20 +1426,19 @@
             nombreDisplay: data.user.nombreDisplay,
             fotoUrl:       data.user.fotoUrl,
           };
-
           saveSession();
           await initApp();
         } else {
           errorEl.textContent = data.error || 'Credenciales incorrectas.';
           errorEl.classList.add('visible');
         }
-      } catch (err) {
+      } catch {
         errorEl.textContent = 'Error de conexión. Intentá de nuevo.';
         errorEl.classList.add('visible');
       }
 
       btn.innerHTML = 'Entrar';
-      btn.disabled = false;
+      btn.disabled  = false;
     }
 
     // ====================================================
@@ -1110,7 +1465,6 @@
     async function initApp() {
       loginScreen.style.display = 'none';
       appScreen.classList.add('visible');
-
       updateHeaderUser();
       await Promise.all([loadCategorias(), loadPlanes(), loadOtherUser()]);
       renderPlanes();
@@ -1118,9 +1472,6 @@
     }
 
     async function loadOtherUser() {
-      // Carga la info del otro usuario para mostrar su avatar en los planes
-      // Se asume que hay exactamente dos usuarios: el actual y "el otro"
-      // Se guarda en state.users para uso en las tarjetas
       state.users[state.session.userId] = {
         nombreDisplay: state.session.nombreDisplay,
         fotoUrl:       state.session.fotoUrl,
@@ -1130,7 +1481,7 @@
     function updateHeaderUser() {
       document.getElementById('header-nombre').textContent = state.session.nombreDisplay;
       setAvatarEl(document.getElementById('header-avatar'), state.session);
-      setAvatarEl(document.getElementById('perfil-avatar'), state.session, true);
+      setAvatarEl(document.getElementById('perfil-avatar'),  state.session, true);
       document.getElementById('perfil-nombre').textContent = state.session.nombreDisplay;
     }
 
@@ -1153,6 +1504,7 @@
       loginScreen.style.display = 'flex';
       document.getElementById('login-user').value = '';
       document.getElementById('login-pass').value = '';
+      initStars();
     });
 
     // ====================================================
@@ -1163,7 +1515,6 @@
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         state.activeTab = tab.dataset.tab;
-
         document.getElementById('tab-planes').style.display     = state.activeTab === 'planes'     ? '' : 'none';
         document.getElementById('tab-categorias').style.display = state.activeTab === 'categorias' ? '' : 'none';
         document.getElementById('tab-perfil').style.display     = state.activeTab === 'perfil'     ? '' : 'none';
@@ -1175,9 +1526,7 @@
     // ====================================================
     async function loadPlanes() {
       const data = await api('getPlanes');
-      if (data.status === 200) {
-        state.planes = data.planes || [];
-      }
+      if (data.status === 200) state.planes = data.planes || [];
     }
 
     function isVencido(plan) {
@@ -1217,24 +1566,24 @@
     }
 
     function renderPlanes() {
-      const grid    = document.getElementById('plans-grid');
-      const planes  = filteredPlanes();
+      const grid   = document.getElementById('plans-grid');
+      const planes = filteredPlanes();
 
       if (planes.length === 0) {
         grid.innerHTML = `
           <div class="empty-state" style="grid-column:1/-1">
-            <span class="empty-icon">🌸</span>
+            <span class="empty-icon">🌙</span>
             <p>No hay planes aquí todavía.</p>
           </div>`;
         return;
       }
 
       grid.innerHTML = planes.map(plan => {
-        const cat      = getCategoriaById(plan.categoriaId);
-        const vencido  = isVencido(plan);
-        const creador  = getUserDisplay(plan.creadoPor);
-        const fotoUrl  = getUserFoto(plan.creadoPor);
-        const initial  = creador?.[0]?.toUpperCase() || '?';
+        const cat     = getCategoriaById(plan.categoriaId);
+        const vencido = isVencido(plan);
+        const creador = getUserDisplay(plan.creadoPor);
+        const fotoUrl = getUserFoto(plan.creadoPor);
+        const initial = creador?.[0]?.toUpperCase() || '?';
 
         const catBadge = cat
           ? `<span class="categoria-badge" style="background:${cat.colorHex}22;color:${cat.colorHex}">${cat.nombre}</span>`
@@ -1276,7 +1625,7 @@
             </div>
             <div class="plan-creator">
               <div class="creator-avatar">${avatarContent}</div>
-              <span style="font-size:0.8rem;color:var(--text-muted)">Por ${escapeHtml(creador)}</span>
+              <span style="font-size:0.75rem;color:var(--text-faint)">Por ${escapeHtml(creador)}</span>
             </div>
             <div class="plan-card-actions">${actions}</div>
           </div>`;
@@ -1296,37 +1645,40 @@
     // ====================================================
     // PLAN — CREAR / EDITAR
     // ====================================================
-    document.getElementById('btn-nuevo-plan').addEventListener('click', () => openModalPlan(null));
+    document.getElementById('btn-nuevo-plan').addEventListener('click', e => {
+      addRipple(e.currentTarget, e);
+      openModalPlan(null);
+    });
     document.getElementById('btn-close-modal-plan').addEventListener('click', closeModalPlan);
     document.getElementById('btn-cancel-plan').addEventListener('click', closeModalPlan);
-    document.getElementById('btn-save-plan').addEventListener('click', savePlan);
+    document.getElementById('btn-save-plan').addEventListener('click', e => {
+      addRipple(e.currentTarget, e);
+      savePlan();
+    });
 
     function openModalPlan(planId) {
       state.editingPlanId = planId || null;
-
-      const titulo = planId
-        ? state.planes.find(p => p.planId === planId)?.titulo || ''
-        : '';
-
       document.getElementById('modal-plan-title').textContent = planId ? 'Editar Plan' : 'Nuevo Plan';
-      document.getElementById('plan-titulo-input').value = titulo;
+      document.getElementById('plan-titulo-input').value = planId
+        ? (state.planes.find(p => p.planId === planId)?.titulo || '')
+        : '';
       document.getElementById('plan-error').classList.remove('visible');
 
-      // Llenar select de categorías
+      // Select de categorías — primera opción vacía (opcional)
       const select = document.getElementById('plan-categoria-select');
-      select.innerHTML = state.categorias.map(c =>
-        `<option value="${c.categoriaId}">${c.nombre}</option>`
-      ).join('');
+      select.innerHTML =
+        '<option value="">Sin categoría</option>' +
+        state.categorias.map(c => `<option value="${c.categoriaId}">${c.nombre}</option>`).join('');
 
       if (planId) {
         const plan = state.planes.find(p => p.planId === planId);
         if (plan) {
-          select.value = plan.categoriaId;
-          document.getElementById('plan-fecha-programada').value = plan.fechaProgramada || '';
+          select.value = plan.categoriaId || '';
+          document.getElementById('plan-fecha-programada').value  = plan.fechaProgramada  || '';
           document.getElementById('plan-fecha-vencimiento').value = plan.fechaVencimiento || '';
         }
       } else {
-        document.getElementById('plan-fecha-programada').value = '';
+        document.getElementById('plan-fecha-programada').value  = '';
         document.getElementById('plan-fecha-vencimiento').value = '';
       }
 
@@ -1339,23 +1691,24 @@
     }
 
     async function savePlan() {
-      const titulo          = document.getElementById('plan-titulo-input').value.trim();
-      const categoriaId     = document.getElementById('plan-categoria-select').value;
-      const fechaProgramada = document.getElementById('plan-fecha-programada').value;
+      const titulo           = document.getElementById('plan-titulo-input').value.trim();
+      const categoriaId      = document.getElementById('plan-categoria-select').value; // puede ser ''
+      const fechaProgramada  = document.getElementById('plan-fecha-programada').value;
       const fechaVencimiento = document.getElementById('plan-fecha-vencimiento').value;
-      const errorEl         = document.getElementById('plan-error');
-      const btn             = document.getElementById('btn-save-plan');
+      const errorEl          = document.getElementById('plan-error');
+      const btn              = document.getElementById('btn-save-plan');
 
       errorEl.classList.remove('visible');
 
-      if (!titulo || !categoriaId || !fechaProgramada) {
-        errorEl.textContent = 'Título, categoría y fecha programada son obligatorios.';
+      // categoría ya NO es obligatoria
+      if (!titulo || !fechaProgramada) {
+        errorEl.textContent = 'El título y la fecha programada son obligatorios.';
         errorEl.classList.add('visible');
         return;
       }
 
       btn.innerHTML = '<span class="spinner"></span>';
-      btn.disabled = true;
+      btn.disabled  = true;
 
       try {
         let data;
@@ -1363,14 +1716,14 @@
           data = await api('updatePlan', {
             planId: state.editingPlanId,
             titulo,
-            categoriaId,
+            categoriaId:      categoriaId || null,
             fechaProgramada,
             fechaVencimiento: fechaVencimiento || null,
           });
         } else {
           data = await api('createPlan', {
             titulo,
-            categoriaId,
+            categoriaId:      categoriaId || null,
             fechaProgramada,
             fechaVencimiento: fechaVencimiento || null,
           });
@@ -1390,28 +1743,20 @@
       }
 
       btn.innerHTML = 'Guardar';
-      btn.disabled = false;
+      btn.disabled  = false;
     }
 
-    function editarPlan(planId) {
-      openModalPlan(planId);
-    }
+    function editarPlan(planId) { openModalPlan(planId); }
 
     async function completarPlan(planId) {
       const data = await api('completePlan', { planId });
-      if (data.status === 200) {
-        await loadPlanes();
-        renderPlanes();
-      }
+      if (data.status === 200) { await loadPlanes(); renderPlanes(); }
     }
 
     async function eliminarPlan(planId) {
       if (!confirm('¿Eliminar este plan?')) return;
       const data = await api('deletePlan', { planId });
-      if (data.status === 200) {
-        await loadPlanes();
-        renderPlanes();
-      }
+      if (data.status === 200) { await loadPlanes(); renderPlanes(); }
     }
 
     // ====================================================
@@ -1419,9 +1764,7 @@
     // ====================================================
     async function loadCategorias() {
       const data = await api('getCategorias');
-      if (data.status === 200) {
-        state.categorias = data.categorias || [];
-      }
+      if (data.status === 200) state.categorias = data.categorias || [];
     }
 
     function renderCategorias() {
@@ -1454,7 +1797,10 @@
     document.getElementById('btn-nueva-categoria').addEventListener('click', () => openModalCat(null));
     document.getElementById('btn-close-modal-cat').addEventListener('click', closeModalCat);
     document.getElementById('btn-cancel-cat').addEventListener('click', closeModalCat);
-    document.getElementById('btn-save-cat').addEventListener('click', saveCategoria);
+    document.getElementById('btn-save-cat').addEventListener('click', e => {
+      addRipple(e.currentTarget, e);
+      saveCategoria();
+    });
 
     function renderColorOptions(selectedColor) {
       const container = document.getElementById('color-options');
@@ -1470,8 +1816,8 @@
     function selectColor(color) {
       state.selectedColor = color;
       document.querySelectorAll('.color-option').forEach(el => {
-        el.classList.toggle('selected', el.style.background === color ||
-          el.style.backgroundColor === color);
+        el.classList.toggle('selected',
+          el.style.background === color || el.style.backgroundColor === color);
       });
     }
 
@@ -1512,16 +1858,12 @@
       }
 
       btn.innerHTML = '<span class="spinner"></span>';
-      btn.disabled = true;
+      btn.disabled  = true;
 
       try {
         let data;
         if (state.editingCatId) {
-          data = await api('updateCategoria', {
-            categoriaId: state.editingCatId,
-            nombre,
-            colorHex,
-          });
+          data = await api('updateCategoria', { categoriaId: state.editingCatId, nombre, colorHex });
         } else {
           data = await api('createCategoria', { nombre, colorHex });
         }
@@ -1540,12 +1882,10 @@
       }
 
       btn.innerHTML = 'Guardar';
-      btn.disabled = false;
+      btn.disabled  = false;
     }
 
-    function editarCategoria(catId) {
-      openModalCat(catId);
-    }
+    function editarCategoria(catId) { openModalCat(catId); }
 
     async function eliminarCategoria(catId) {
       if (!confirm('¿Eliminar esta categoría?')) return;
@@ -1575,7 +1915,7 @@
     });
 
     document.getElementById('file-input').addEventListener('change', async (e) => {
-      const file = e.target.files?.[0];
+      const file    = e.target.files?.[0];
       if (!file) return;
 
       const errorEl = document.getElementById('perfil-error');
@@ -1590,10 +1930,7 @@
       const reader = new FileReader();
       reader.onload = async (ev) => {
         const base64 = ev.target.result.split(',')[1];
-        const data = await api('uploadPhoto', {
-          fileBase64: base64,
-          mimeType:   file.type,
-        });
+        const data   = await api('uploadPhoto', { fileBase64: base64, mimeType: file.type });
 
         if (data.status === 200) {
           state.session.fotoUrl = data.fotoUrl;
@@ -1606,8 +1943,6 @@
         }
       };
       reader.readAsDataURL(file);
-
-      // Limpiar input para permitir re-selección del mismo archivo
       e.target.value = '';
     });
 
@@ -1616,22 +1951,22 @@
     // ====================================================
     function escapeHtml(str) {
       return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/&/g,  '&amp;')
+        .replace(/</g,  '&lt;')
+        .replace(/>/g,  '&gt;')
+        .replace(/"/g,  '&quot;');
     }
 
     // ====================================================
     // ARRANQUE
     // ====================================================
     (async function boot() {
+      initStars();
       const saved = loadSession();
       if (saved?.userId && saved?.sessionToken) {
         state.session = saved;
         await initApp();
       }
-      // Si no hay sesión, el login-screen ya está visible por defecto
     })();
   </script>
 </body>

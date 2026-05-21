@@ -1466,16 +1466,45 @@
       loginScreen.style.display = 'none';
       appScreen.classList.add('visible');
       updateHeaderUser();
-      await Promise.all([loadCategorias(), loadPlanes(), loadOtherUser()]);
+      await Promise.all([loadCategorias(), loadPlanes()]);
+      await loadOtherUsers();
       renderPlanes();
       renderCategorias();
     }
 
-    async function loadOtherUser() {
+    // Registra al usuario logueado y pide datos del resto de usuarios
+    // que aparezcan en los planes cargados.
+    async function loadOtherUsers() {
+      // Siempre registrar al usuario actual en el mapa
       state.users[state.session.userId] = {
         nombreDisplay: state.session.nombreDisplay,
         fotoUrl:       state.session.fotoUrl,
       };
+
+      // Detectar IDs de otros usuarios que aparecen en los planes
+      const otherIds = [...new Set(
+        state.planes
+          .map(p => p.creadoPor)
+          .filter(id => id && id !== state.session.userId && !state.users[id])
+      )];
+
+      // Pedir datos de cada uno al backend
+      await Promise.all(otherIds.map(async (id) => {
+        try {
+          const data = await api('getUser', { userId: id });
+          if (data.status === 200) {
+            state.users[id] = {
+              nombreDisplay: data.nombreDisplay,
+              fotoUrl:       data.fotoUrl || null,
+            };
+          } else {
+            // Si el backend no lo encuentra, usar el ID como fallback
+            state.users[id] = { nombreDisplay: id, fotoUrl: null };
+          }
+        } catch {
+          state.users[id] = { nombreDisplay: id, fotoUrl: null };
+        }
+      }));
     }
 
     function updateHeaderUser() {
@@ -1527,6 +1556,12 @@
     async function loadPlanes() {
       const data = await api('getPlanes');
       if (data.status === 200) state.planes = data.planes || [];
+    }
+
+    // Recarga planes y actualiza el mapa de usuarios en un solo paso
+    async function refreshPlanes() {
+      await loadPlanes();
+      await loadOtherUsers();
     }
 
     function isVencido(plan) {
@@ -1724,13 +1759,14 @@
           data = await api('createPlan', {
             titulo,
             categoriaId:      categoriaId || null,
+            userId:           state.session.userId,
             fechaProgramada,
             fechaVencimiento: fechaVencimiento || null,
           });
         }
 
         if (data.status === 200) {
-          await loadPlanes();
+          await refreshPlanes();
           renderPlanes();
           closeModalPlan();
         } else {
@@ -1750,13 +1786,13 @@
 
     async function completarPlan(planId) {
       const data = await api('completePlan', { planId });
-      if (data.status === 200) { await loadPlanes(); renderPlanes(); }
+      if (data.status === 200) { await refreshPlanes(); renderPlanes(); }
     }
 
     async function eliminarPlan(planId) {
       if (!confirm('¿Eliminar este plan?')) return;
       const data = await api('deletePlan', { planId });
-      if (data.status === 200) { await loadPlanes(); renderPlanes(); }
+      if (data.status === 200) { await refreshPlanes(); renderPlanes(); }
     }
 
     // ====================================================

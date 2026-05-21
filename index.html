@@ -1057,6 +1057,116 @@
     }
 
     /* ====================================================
+       MODAL EDITOR DE FOTO DE PERFIL
+    ==================================================== */
+    #modal-foto-perfil .modal {
+      max-width: 400px;
+    }
+
+    .foto-perfil-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0.5rem 0 1rem;
+    }
+
+    /* Avatar grande de previsualización actual */
+    .foto-preview-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 1px solid var(--copper-dim);
+      background: #1E1A14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: var(--copper);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .foto-preview-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Área del canvas de recorte */
+    .crop-area {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .crop-area.visible {
+      display: flex;
+    }
+
+    #crop-canvas {
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--border-soft);
+      cursor: none;
+      touch-action: none;
+      max-width: 100%;
+    }
+
+    .crop-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .crop-zoom-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .crop-zoom-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      flex-shrink: 0;
+    }
+
+    #crop-zoom-input {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      cursor: none;
+    }
+
+    #crop-zoom-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--copper);
+      cursor: none;
+    }
+
+    #crop-zoom-input::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--copper);
+      cursor: none;
+      border: none;
+    }
+
+    /* ====================================================
        RESPONSIVE
     ==================================================== */
     @media (max-width: 600px) {
@@ -1250,6 +1360,43 @@
         <button class="btn btn-primary" id="btn-save-cat">Guardar</button>
       </div>
       <div class="error-msg" id="cat-error"></div>
+    </div>
+  </div>
+
+  <!-- ================================================
+       MODAL: EDITOR DE FOTO DE PERFIL
+  ================================================ -->
+  <div class="modal-overlay" id="modal-foto-perfil">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Mi foto de perfil</h3>
+        <button class="btn-icon" id="btn-close-modal-foto">✕</button>
+      </div>
+
+      <!-- Sección: previsualización de foto actual -->
+      <div class="foto-perfil-preview" id="foto-preview-section">
+        <div class="foto-preview-avatar" id="foto-preview-avatar"></div>
+        <button class="btn btn-secondary btn-sm" id="btn-abrir-selector-foto">
+          Cambiar foto
+        </button>
+      </div>
+
+      <!-- Sección: editor de recorte (visible solo tras seleccionar imagen) -->
+      <div class="crop-area" id="crop-area">
+        <canvas id="crop-canvas" width="280" height="280"></canvas>
+        <p class="crop-hint">Arrastrá para mover · Scroll o slider para zoom</p>
+        <div class="crop-zoom-row">
+          <span class="crop-zoom-label">Zoom</span>
+          <input type="range" id="crop-zoom-input" min="1" max="3" step="0.01" value="1" />
+        </div>
+      </div>
+
+      <div class="error-msg" id="foto-modal-error"></div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-cancelar-foto">Cancelar</button>
+        <button class="btn btn-primary" id="btn-aplicar-foto" style="display:none">Aplicar</button>
+      </div>
     </div>
   </div>
 
@@ -1973,12 +2120,210 @@
     }
 
     // ====================================================
-    // PERFIL — FOTO
+    // PERFIL — FOTO (modal + editor de recorte)
     // ====================================================
-    document.getElementById('btn-cambiar-foto').addEventListener('click', () => {
+
+    // Estado interno del editor de recorte
+    const cropState = {
+      image:     null,   // HTMLImageElement con la imagen cargada
+      zoom:      1,
+      offsetX:   0,      // desplazamiento del centro de la imagen en px del canvas
+      offsetY:   0,
+      dragging:  false,
+      lastX:     0,
+      lastY:     0,
+      mimeType:  'image/jpeg',
+    };
+
+    const modalFotoPerfil  = document.getElementById('modal-foto-perfil');
+    const fotoPrevSection  = document.getElementById('foto-preview-section');
+    const fotoPrevAvatar   = document.getElementById('foto-preview-avatar');
+    const cropArea         = document.getElementById('crop-area');
+    const cropCanvas       = document.getElementById('crop-canvas');
+    const cropCtx          = cropCanvas.getContext('2d');
+    const cropZoomInput    = document.getElementById('crop-zoom-input');
+    const btnAplicarFoto   = document.getElementById('btn-aplicar-foto');
+    const fotoModalError   = document.getElementById('foto-modal-error');
+
+    // Abre el modal de foto mostrando la foto actual
+    function openModalFoto() {
+      fotoModalError.classList.remove('visible');
+
+      // Mostrar la foto actual en el preview
+      fotoPrevAvatar.innerHTML = '';
+      if (state.session?.fotoUrl) {
+        const img = document.createElement('img');
+        img.src = state.session.fotoUrl;
+        img.alt = state.session.nombreDisplay;
+        fotoPrevAvatar.appendChild(img);
+      } else {
+        fotoPrevAvatar.textContent = state.session?.nombreDisplay?.[0]?.toUpperCase() || '?';
+      }
+
+      // Resetear al estado de previsualización
+      fotoPrevSection.style.display = '';
+      cropArea.classList.remove('visible');
+      btnAplicarFoto.style.display = 'none';
+
+      // Resetear estado del crop
+      cropState.image   = null;
+      cropState.zoom    = 1;
+      cropState.offsetX = 0;
+      cropState.offsetY = 0;
+      cropZoomInput.value = '1';
+
+      modalFotoPerfil.classList.add('visible');
+    }
+
+    function closeModalFoto() {
+      modalFotoPerfil.classList.remove('visible');
+      // Limpiar el file-input para que el change se dispare aunque se elija el mismo archivo
+      document.getElementById('file-input').value = '';
+    }
+
+    // Dibuja el canvas de recorte circular
+    function drawCrop() {
+      const size = cropCanvas.width; // 280
+      cropCtx.clearRect(0, 0, size, size);
+
+      const img = cropState.image;
+      if (!img) return;
+
+      // Dimensiones escaladas de la imagen
+      const scaledW = img.naturalWidth  * cropState.zoom;
+      const scaledH = img.naturalHeight * cropState.zoom;
+
+      // Clamp offset para que la imagen no deje espacio vacío en el canvas
+      const maxOffX = scaledW / 2;
+      const minOffX = size - scaledW / 2;
+      const maxOffY = scaledH / 2;
+      const minOffY = size - scaledH / 2;
+
+      cropState.offsetX = Math.min(maxOffX, Math.max(minOffX, cropState.offsetX));
+      cropState.offsetY = Math.min(maxOffY, Math.max(minOffY, cropState.offsetY));
+
+      // Clip circular
+      cropCtx.save();
+      cropCtx.beginPath();
+      cropCtx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+      cropCtx.clip();
+
+      // Dibujar imagen centrada + offset
+      cropCtx.drawImage(
+        img,
+        cropState.offsetX - scaledW / 2,
+        cropState.offsetY - scaledH / 2,
+        scaledW,
+        scaledH
+      );
+
+      cropCtx.restore();
+
+      // Borde decorativo dorado
+      cropCtx.beginPath();
+      cropCtx.arc(size / 2, size / 2, size / 2 - 1, 0, Math.PI * 2);
+      cropCtx.strokeStyle = 'rgba(184,120,58,0.5)';
+      cropCtx.lineWidth   = 1.5;
+      cropCtx.stroke();
+    }
+
+    // Inicializa el editor cuando se carga una imagen
+    function initCropEditor(img, mimeType) {
+      cropState.image    = img;
+      cropState.mimeType = mimeType;
+      cropState.zoom     = 1;
+
+      // Zoom mínimo: que la imagen cubra el canvas entero
+      const size    = cropCanvas.width;
+      const minZoom = Math.max(size / img.naturalWidth, size / img.naturalHeight);
+      cropState.zoom = Math.max(1, minZoom);
+      cropZoomInput.min   = String(Math.max(1, minZoom));
+      cropZoomInput.value = String(cropState.zoom);
+
+      // Centro inicial
+      cropState.offsetX = size / 2;
+      cropState.offsetY = size / 2;
+
+      drawCrop();
+
+      // Mostrar editor, ocultar previsualización
+      fotoPrevSection.style.display = 'none';
+      cropArea.classList.add('visible');
+      btnAplicarFoto.style.display = '';
+    }
+
+    // Zoom con slider
+    cropZoomInput.addEventListener('input', () => {
+      cropState.zoom = parseFloat(cropZoomInput.value);
+      drawCrop();
+    });
+
+    // Zoom con scroll sobre el canvas
+    cropCanvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.05 : 0.05;
+      const min   = parseFloat(cropZoomInput.min);
+      cropState.zoom = Math.min(3, Math.max(min, cropState.zoom + delta));
+      cropZoomInput.value = String(cropState.zoom);
+      drawCrop();
+    }, { passive: false });
+
+    // Drag con mouse
+    cropCanvas.addEventListener('mousedown', (e) => {
+      cropState.dragging = true;
+      cropState.lastX    = e.clientX;
+      cropState.lastY    = e.clientY;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!cropState.dragging) return;
+      cropState.offsetX += e.clientX - cropState.lastX;
+      cropState.offsetY += e.clientY - cropState.lastY;
+      cropState.lastX    = e.clientX;
+      cropState.lastY    = e.clientY;
+      drawCrop();
+    });
+
+    document.addEventListener('mouseup', () => { cropState.dragging = false; });
+
+    // Drag touch (mobile)
+    cropCanvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      cropState.dragging = true;
+      cropState.lastX    = e.touches[0].clientX;
+      cropState.lastY    = e.touches[0].clientY;
+    }, { passive: true });
+
+    cropCanvas.addEventListener('touchmove', (e) => {
+      if (!cropState.dragging || e.touches.length !== 1) return;
+      e.preventDefault();
+      cropState.offsetX += e.touches[0].clientX - cropState.lastX;
+      cropState.offsetY += e.touches[0].clientY - cropState.lastY;
+      cropState.lastX    = e.touches[0].clientX;
+      cropState.lastY    = e.touches[0].clientY;
+      drawCrop();
+    }, { passive: false });
+
+    cropCanvas.addEventListener('touchend', () => { cropState.dragging = false; });
+
+    // Click en avatar del perfil o en el wrapper → abre modal
+    document.getElementById('btn-cambiar-foto').addEventListener('click', openModalFoto);
+
+    // Botón dentro del modal → abre selector de archivos
+    document.getElementById('btn-abrir-selector-foto').addEventListener('click', () => {
       document.getElementById('file-input').click();
     });
 
+    // Cerrar modal
+    document.getElementById('btn-close-modal-foto').addEventListener('click', closeModalFoto);
+    document.getElementById('btn-cancelar-foto').addEventListener('click', closeModalFoto);
+
+    // Cerrar modal al hacer click en el overlay (fuera del modal)
+    modalFotoPerfil.addEventListener('click', (e) => {
+      if (e.target === modalFotoPerfil) closeModalFoto();
+    });
+
+    // Navegar al perfil desde el header
     document.getElementById('btn-perfil-header').addEventListener('click', () => {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
       document.querySelector('[data-tab="perfil"]').classList.add('active');
@@ -1988,36 +2333,90 @@
       document.getElementById('tab-perfil').style.display     = '';
     });
 
-    document.getElementById('file-input').addEventListener('change', async (e) => {
-      const file    = e.target.files?.[0];
+    // Cuando se selecciona un archivo → mostrar editor de recorte
+    document.getElementById('file-input').addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
       if (!file) return;
 
-      const errorEl = document.getElementById('perfil-error');
-      errorEl.classList.remove('visible');
+      fotoModalError.classList.remove('visible');
 
       if (file.size > 3 * 1024 * 1024) {
-        errorEl.textContent = 'La imagen no puede superar 3 MB.';
-        errorEl.classList.add('visible');
+        fotoModalError.textContent = 'La imagen no puede superar 3 MB.';
+        fotoModalError.classList.add('visible');
+        e.target.value = '';
         return;
       }
 
       const reader = new FileReader();
-      reader.onload = async (ev) => {
-        const base64 = ev.target.result.split(',')[1];
-        const data   = await api('uploadPhoto', { fileBase64: base64, mimeType: file.type });
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => initCropEditor(img, file.type);
+        img.src    = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    });
+
+    // Aplicar: exportar el canvas recortado y subirlo
+    btnAplicarFoto.addEventListener('click', async () => {
+      if (!cropState.image) return;
+
+      fotoModalError.classList.remove('visible');
+      btnAplicarFoto.innerHTML  = '<span class="spinner"></span>';
+      btnAplicarFoto.disabled   = true;
+
+      // Exportar el canvas circular como JPEG (fondo negro para el círculo)
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width  = cropCanvas.width;
+      exportCanvas.height = cropCanvas.height;
+      const exportCtx = exportCanvas.getContext('2d');
+
+      // Fondo negro (para JPEG que no soporta transparencia)
+      exportCtx.fillStyle = '#0E0C0A';
+      exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+      // Redibujar la imagen recortada sobre el canvas de exportación
+      const size    = cropCanvas.width;
+      const scaledW = cropState.image.naturalWidth  * cropState.zoom;
+      const scaledH = cropState.image.naturalHeight * cropState.zoom;
+
+      exportCtx.save();
+      exportCtx.beginPath();
+      exportCtx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+      exportCtx.clip();
+      exportCtx.drawImage(
+        cropState.image,
+        cropState.offsetX - scaledW / 2,
+        cropState.offsetY - scaledH / 2,
+        scaledW,
+        scaledH
+      );
+      exportCtx.restore();
+
+      const dataUrl  = exportCanvas.toDataURL('image/jpeg', 0.92);
+      const base64   = dataUrl.split(',')[1];
+      const mimeType = 'image/jpeg';
+
+      try {
+        const data = await api('uploadPhoto', { fileBase64: base64, mimeType });
 
         if (data.status === 200) {
           state.session.fotoUrl = data.fotoUrl;
           saveSession();
           updateHeaderUser();
           renderPlanes();
+          closeModalFoto();
         } else {
-          errorEl.textContent = data.error || 'Error al subir la foto.';
-          errorEl.classList.add('visible');
+          fotoModalError.textContent = data.error || 'Error al subir la foto.';
+          fotoModalError.classList.add('visible');
         }
-      };
-      reader.readAsDataURL(file);
-      e.target.value = '';
+      } catch {
+        fotoModalError.textContent = 'Error de conexión.';
+        fotoModalError.classList.add('visible');
+      }
+
+      btnAplicarFoto.innerHTML = 'Aplicar';
+      btnAplicarFoto.disabled  = false;
     });
 
     // ====================================================

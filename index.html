@@ -21,9 +21,9 @@
       --copper-light: #D4A060;
       --copper-dim:   rgba(184,120,58,0.45);
       --text-main:    #EDE0CC;
-      --text-soft:    #9A9088;
-      --text-muted:   #4A4540;
-      --text-faint:   #3A342C;
+      --text-soft:    #A09488;
+      --text-muted:   #6A6058;
+      --text-faint:   #524840;
       --green-ok:     #6AAA80;
       --green-ok-bg:  #0A1E10;
       --red-venc:     #AA6060;
@@ -376,6 +376,9 @@
       color: var(--text-muted);
       font-size: 1rem;
       line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-icon:hover {
@@ -513,9 +516,9 @@
 
     .nav-tab {
       padding: 0.85rem 1.1rem;
-      font-size: 0.7rem;
+      font-size: 0.74rem;
       font-weight: 400;
-      color: var(--text-faint);
+      color: var(--text-muted);
       cursor: none;
       border-bottom: 1.5px solid transparent;
       transition: var(--transition);
@@ -559,7 +562,7 @@
       font-family: 'DM Serif Display', serif;
       font-style: italic;
       font-size: 0.78rem;
-      color: var(--text-faint);
+      color: var(--text-muted);
       margin-top: 2px;
     }
 
@@ -678,9 +681,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.18rem 0.6rem;
+      padding: 0.22rem 0.7rem;
       border-radius: var(--radius-sm);
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       font-weight: 400;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -710,7 +713,7 @@
 
     .plan-titulo {
       font-family: 'DM Serif Display', serif;
-      font-size: 1rem;
+      font-size: 1.08rem;
       font-style: italic;
       color: var(--text-main);
       margin-bottom: 0.6rem;
@@ -725,15 +728,18 @@
     }
 
     .plan-meta-item {
-      font-size: 0.75rem;
-      color: var(--text-faint);
+      font-size: 0.82rem;
+      color: var(--text-soft);
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     .plan-meta-item span.icon {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
     }
 
     .plan-creator {
@@ -817,7 +823,7 @@
       font-family: 'DM Serif Display', serif;
       font-style: italic;
       font-size: 1.05rem;
-      color: var(--text-faint);
+      color: var(--text-muted);
     }
 
     /* ====================================================
@@ -1165,12 +1171,17 @@
           <div class="perfil-header">
             <div class="perfil-avatar-wrapper" id="btn-cambiar-foto" title="Cambiar foto">
               <div class="avatar avatar-lg" id="perfil-avatar"></div>
-              <div class="perfil-avatar-overlay">📷</div>
+              <div class="perfil-avatar-overlay">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.5 4.5L6.5 6H3.5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-3l-1-1.5h-5z" stroke="#EDE0CC" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="10" cy="10.5" r="2.5" stroke="#EDE0CC" stroke-width="1"/>
+                </svg>
+              </div>
             </div>
             <div class="perfil-nombre" id="perfil-nombre"></div>
           </div>
           <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none" />
-          <p style="font-size:0.78rem; color:var(--text-faint); text-align:center">
+          <p style="font-size:0.78rem; color:var(--text-muted); text-align:center">
             Hacé clic en la foto para cambiarla.<br>Formatos: JPG, PNG, WEBP.
           </p>
           <div class="error-msg" id="perfil-error" style="margin-top:1rem"></div>
@@ -1607,7 +1618,7 @@
       if (planes.length === 0) {
         grid.innerHTML = `
           <div class="empty-state" style="grid-column:1/-1">
-            <span class="empty-icon">🌙</span>
+            <span class="empty-icon" style="font-family: serif; font-style: italic; font-size:2rem; color:var(--copper); opacity:0.35;">✦</span>
             <p>No hay planes aquí todavía.</p>
           </div>`;
         return;
@@ -1635,8 +1646,18 @@
         const actions = plan.estado === 'completado'
           ? `<span class="completado-label">✓ Completado</span>`
           : `<button class="btn-completar" onclick="completarPlan('${plan.planId}')">Marcar completado</button>
-             <button class="btn-icon" onclick="editarPlan('${plan.planId}')" title="Editar">✏️</button>
-             <button class="btn-icon" onclick="eliminarPlan('${plan.planId}')" title="Eliminar">🗑️</button>`;
+             <button class="btn-icon" onclick="editarPlan('${plan.planId}')" title="Editar">
+               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M2 10.5L3.5 9 9.5 3l1.5 1.5L5 10.5l-2 .5-.5-.5z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                 <path d="M8.5 3l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+               </svg>
+             </button>
+             <button class="btn-icon" onclick="eliminarPlan('${plan.planId}')" title="Eliminar">
+               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M2.5 4h9M5.5 4V2.5h3V4M5.5 6.5v4M8.5 6.5v4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                 <path d="M3.5 4l.5 7.5h6l.5-7.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+               </svg>
+             </button>`;
 
         return `
           <div class="plan-card ${plan.estado === 'completado' ? 'completado' : ''} ${vencido ? 'vencido' : ''}">
@@ -1647,20 +1668,37 @@
             <div class="plan-titulo">${escapeHtml(plan.titulo)}</div>
             <div class="plan-meta">
               <div class="plan-meta-item">
-                <span class="icon">📅</span> Para el ${formatDateDisplay(plan.fechaProgramada)}
+                <span class="icon">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="2.5" width="9" height="8" rx="1" stroke="currentColor" stroke-width="0.9"/>
+                    <path d="M3.5 1v3M7.5 1v3" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+                    <path d="M1 5.5h9" stroke="currentColor" stroke-width="0.9"/>
+                  </svg>
+                </span> Para el ${formatDateDisplay(plan.fechaProgramada)}
               </div>
               ${plan.fechaVencimiento
                 ? `<div class="plan-meta-item">
-                    <span class="icon">⏳</span> Vence el ${formatDateDisplay(plan.fechaVencimiento)}
+                    <span class="icon">
+                      <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="5.5" cy="6" r="4" stroke="currentColor" stroke-width="0.9"/>
+                        <path d="M5.5 4v2.5l1.5 1" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3.5 1.5h4" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+                      </svg>
+                    </span> Vence el ${formatDateDisplay(plan.fechaVencimiento)}
                    </div>`
                 : ''}
               <div class="plan-meta-item">
-                <span class="icon">📝</span> Creado el ${formatDateDisplay(plan.fechaCreacion)}
+                <span class="icon">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 8.5L3.5 7l4.5-4.5 1 1L4.5 8l-1.5.5-.5-.5z" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 2.5l1 1" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+                  </svg>
+                </span> Creado el ${formatDateDisplay(plan.fechaCreacion)}
               </div>
             </div>
             <div class="plan-creator">
               <div class="creator-avatar">${avatarContent}</div>
-              <span style="font-size:0.75rem;color:var(--text-faint)">Por ${escapeHtml(creador)}</span>
+              <span style="font-size:0.78rem;color:var(--text-soft)">Por ${escapeHtml(creador)}</span>
             </div>
             <div class="plan-card-actions">${actions}</div>
           </div>`;
@@ -1809,7 +1847,7 @@
       if (state.categorias.length === 0) {
         list.innerHTML = `
           <div class="empty-state">
-            <span class="empty-icon">🏷️</span>
+            <span class="empty-icon" style="font-family: serif; font-style: italic; font-size:2rem; color:var(--copper); opacity:0.35;">◇</span>
             <p>Todavía no hay categorías.</p>
           </div>`;
         return;

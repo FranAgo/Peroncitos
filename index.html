@@ -2231,14 +2231,17 @@
     function initCropEditor(img, mimeType) {
       cropState.image    = img;
       cropState.mimeType = mimeType;
-      cropState.zoom     = 1;
 
-      // Zoom mínimo: que la imagen cubra el canvas entero
+      // Zoom mínimo: el valor exacto para que la imagen cubra el canvas sin dejar espacio vacío.
+      // Para fotos grandes (celular) este valor es < 1 — no se clampea a 1,
+      // porque eso es precisamente lo que queremos como punto de partida.
       const size    = cropCanvas.width;
       const minZoom = Math.max(size / img.naturalWidth, size / img.naturalHeight);
-      cropState.zoom = Math.max(1, minZoom);
-      cropZoomInput.min   = String(Math.max(1, minZoom));
-      cropZoomInput.value = String(cropState.zoom);
+
+      cropState.zoom      = minZoom;         // empieza cubriendo justo el canvas
+      cropZoomInput.min   = String(minZoom); // mínimo = justo cubierto
+      cropZoomInput.max   = '3';
+      cropZoomInput.value = String(minZoom);
 
       // Centro inicial
       cropState.offsetX = size / 2;
